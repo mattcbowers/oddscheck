@@ -59,6 +59,7 @@ new_data = pd.DataFrame({
 })
 print(mod_logit.predict(scaler.transform(new_data)))
 print(mod_logit_reload.predict(scaler_reload.transform(new_data)))
+print(mod_logit.predict_proba(scaler.transform(new_data)))
 
 """
 # ## Logistic Regression Pipeline
