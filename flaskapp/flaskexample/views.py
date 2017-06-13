@@ -1,6 +1,7 @@
 from flask import render_template
 from flask import request
 from flaskexample import app
+from flaskexample.utils import generate_output
 # from sqlalchemy import create_engine
 # from sqlalchemy_utils import database_exists, create_database
 # import pandas as pd
@@ -16,7 +17,9 @@ def index():
 @app.route('/go')
 def go():
     query = request.args.get('query', '')
+    # out_text = query.upper()
+    out_text = generate_output(query)
     return render_template(
         'go.html',
-        query=query,
+        out_text = out_text,
     )
