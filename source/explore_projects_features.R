@@ -21,6 +21,8 @@ projects_trim <- projects_trim  %>%
 
 # Modeling -------------------------------------------------------------
 projects_trim$funding_status <- as.factor(projects_trim$funding_status)
+# saveRDS(projects_trim, "data_rds/projects_trim_sample.rds")
+projects_trim <- readRDS("data_rds/projects_trim_sample.rds")
 mod0 <- glm(funding_status ~ 1, data = projects_trim, family = "binomial")
 mod_full <- glm(funding_status ~ ., data = projects_trim, family = binomial)
 
