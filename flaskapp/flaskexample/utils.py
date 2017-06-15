@@ -1,7 +1,7 @@
+import pandas as pd
+import pickle
+from sklearn.linear_model import LogisticRegression
 def generate_output(query):
-    import pandas as pd
-    import pickle
-    from sklearn.linear_model import LogisticRegression
     cost = float(query)
     # create data frame from query
     new_data = pd.DataFrame({
