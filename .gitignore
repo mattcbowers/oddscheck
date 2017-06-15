@@ -7,3 +7,4 @@ figures
 models
 slides
 *.pyc
+data_rds
