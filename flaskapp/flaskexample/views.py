@@ -18,9 +18,11 @@ def index():
 @app.route('/go')
 def go():
     query = request.args.get('query', '')
+    query2 = request.args.get('query2', '')
     # out_text = query.upper()
     out_text = generate_output(query)
     return render_template(
         'go.html',
         out_text = out_text,
+        out_text2 = 'hello world',
     )
