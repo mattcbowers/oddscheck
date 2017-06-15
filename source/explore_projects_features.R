@@ -25,10 +25,12 @@ projects_trim$funding_status <- as.factor(projects_trim$funding_status)
 projects_trim <- readRDS("data_rds/projects_trim_sample.rds")
 mod0 <- glm(funding_status ~ 1, data = projects_trim, family = "binomial")
 mod_full <- glm(funding_status ~ ., data = projects_trim, family = binomial)
+mod_price <- glm(funding_status ~ total_price_excluding_optional_support, data = projects_trim, family = "binomial")
+# positive coeficients indicate increased probability of expiration.
 
 # Best subset selection
 library(leaps)
-mod_bestsub <- regsubsets(funding_status ~ ., data = projects_trim, nvmax = 19)
+mod_bestsub <- regsubsets(funding_status ~ ., data = projects_trim, nvmax = 40)
 mod_bestsub_sum <- summary(mod_bestsub)
 names(mod_bestsub_sum)
 plot(mod_bestsub)
@@ -53,6 +55,16 @@ which.min(mod_backward_sum$bic)
 
 ## Ridge and Lasso
 library(glmnet)
+X <- model.matrix(funding_status ~ ., data = projects_trim)
+Y <- projects_trim$funding_status
+mod_ridge <- glmnet(X, Y, family = "binomial", alpha = 0)
+ridge_cv <- cv.glmnet(X, Y, family = "binomial", alpha = 0)
+plot(ridge_cv)
+plot(mod_ridge, xvar = "lambda", label = TRUE)
+mod_lasso <- glmnet(X, Y, family = "binomial", alpha = 1)
+lasso_cv <- cv.glmnet(X, Y, family = "binomial", alpha = 1)
+plot(lasso_cv)
+plot(mod_lasso, xvar = "lambda", label = TRUE)
 
 # Find the linearly dependent rows--------------------------------------
 # turns out to be subject/area
