@@ -9,7 +9,7 @@ projects <- projects_tbl %>%
 
 # Trim out missing values and unneeded columns
 projects_trim <- projects  %>% 
-  select(funding_status, school_zip, school_metro, school_charter, school_magnet, school_year_round, school_nlns, school_kipp, school_charter_ready_promise, teacher_prefix, teacher_teach_for_america, teacher_ny_teaching_fellow, primary_focus_area, secondary_focus_subject, secondary_focus_area, resource_type, poverty_level, grade_level, vendor_shipping_charges, sales_tax, payment_processing_charges, total_price_excluding_optional_support, students_reached)  
+  select(funding_status, school_zip, school_metro, school_charter, school_magnet, school_year_round, school_nlns, school_kipp, school_charter_ready_promise, teacher_prefix, teacher_teach_for_america, teacher_ny_teaching_fellow, primary_focus_area, secondary_focus_area, resource_type, poverty_level, grade_level, total_price_excluding_optional_support, students_reached)  
 prop_missing <- colMeans(is.na(projects_trim)) 
 high_miss_cols <- prop_missing[prop_missing > 0.05]
 projects_trim <- projects_trim[ , !(names(projects_trim) %in% names(high_miss_cols))]
