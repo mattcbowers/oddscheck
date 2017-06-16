@@ -9,6 +9,7 @@ import sys
 from sklearn_pandas import DataFrameMapper, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
 
 # import a data frame
 def get_data(fname, frac_na_tolerable = 0.05):
@@ -18,6 +19,10 @@ def get_data(fname, frac_na_tolerable = 0.05):
     col_initial_keep = ['funding_status', 'school_state', 'school_metro', 'school_charter', 'school_magnet', 'school_year_round', 'school_nlns', 'school_kipp', 'school_charter_ready_promise', 'teacher_prefix', 'teacher_teach_for_america', 'teacher_ny_teaching_fellow', 'primary_focus_area', 'secondary_focus_area', 'resource_type', 'poverty_level', 'grade_level', 'total_price_excluding_optional_support', 'students_reached']
     df = pd.read_csv(fname, escapechar='\\', names = col_names) 
     # convert number students to float
+    df['date_posted'] = pd.to_datetime(df['date_posted'])
+    df = df[df['date_posted'] < pd.to_datetime('2016-10-01')]
+    print('removed the recent dates with incomplete projects')
+    print(df.shape)
     df.students_reached = df.students_reached.astype(float)
     print("Initial size of data")
     print(df.shape)
@@ -47,8 +52,11 @@ def get_data(fname, frac_na_tolerable = 0.05):
     df.drop('funding_status', axis = 1, inplace = True)
     return(df.dropna())
 
-df_train = get_data('data_csv/projects/projects.csv.aa')
-df_test = get_data('data_csv/projects/projects.csv.ab')
+#df_train = get_data('data_csv/projects/projects.csv.aa')
+#df_test = get_data('data_csv/projects/projects.csv.ab')
+
+df = get_data('data_csv/projects/projects.csv.ab')
+(df_train, df_test) = train_test_split(df, train_size = .67, random_state = 27)
 
 # Split data into test and training
 def df_to_X(df):
@@ -71,7 +79,8 @@ cols_binary = get_df_types(df_train, 'bool')
 cols_str = get_df_types(df_train, 'object')
 
 mapper = DataFrameMapper([
-    (cols_numeric, preprocessing.StandardScaler()),
+    ('total_price_excluding_optional_support', preprocessing.StandardScaler()),
+    ('students_reached', preprocessing.StandardScaler()),
     ('school_state', preprocessing.LabelBinarizer()),
     ('school_charter', preprocessing.LabelBinarizer()),
     ('school_magnet', preprocessing.LabelBinarizer()),
@@ -92,7 +101,8 @@ mapper = DataFrameMapper([
 mapper.fit_transform(df_train.copy())
 feature_names = mapper.transformed_names_
 
-score = metrics.make_scorer(metrics.accuracy_score)
+#score = metrics.make_scorer(metrics.accuracy_score)
+score = metrics.make_scorer(metrics.f1_score)
 Cs =  10 ** np.array(range(-2, 4)) + .001
 logistic = LogisticRegression(penalty='l1')
 #logistic.fit(mapper.fit_transform(X_train),Y_train)
@@ -134,11 +144,15 @@ y_true, y_pred = Y_test, grid.predict(X_test)
 print(metrics.classification_report(y_true, y_pred,target_names= None))
 print()
 
+# The best model
+print('coefficients of best model')
+best = grid.best_estimator_.named_steps['logistic']
+fitted_coefs = pd.DataFrame({'name':feature_names, 'coef':best.coef_[0]}).sort('coef')
+print(fitted_coefs)
 
 sys.exit()
 # save the scaler and the model
-filename_model = 'models/mod_logit_simple.pkl'
-filename_scaler = 'models/mod_logit_simple_scaler.pkl'
+filename_model = 'models/mod_logit.pkl'
 pickle.dump(mod_logit, open(filename_model, 'wb'))
 pickle.dump(scaler, open(filename_scaler, 'wb'))
 
