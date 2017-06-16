@@ -55,7 +55,10 @@ def get_data(fname, frac_na_tolerable = 0.05):
 #df_train = get_data('data_csv/projects/projects.csv.aa')
 #df_test = get_data('data_csv/projects/projects.csv.ab')
 
-df = get_data('data_csv/projects/projects.csv.ab')
+# fname = 'data_csv/projects/projects.csv.ab'
+fname = 'data/opendata_projects000.gz'
+
+df = get_data(fname)
 (df_train, df_test) = train_test_split(df, train_size = .67, random_state = 27)
 
 # Split data into test and training
