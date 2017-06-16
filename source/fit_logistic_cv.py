@@ -4,9 +4,11 @@ import pandas as pd
 import pickle
 from sklearn.linear_model import LogisticRegression
 from sklearn import preprocessing 
-from sklearn.metrics import accuracy_score
+from sklearn import metrics
 import sys
 from sklearn_pandas import DataFrameMapper, cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
 
 # import a data frame
 def get_data(fname, frac_na_tolerable = 0.05):
@@ -69,28 +71,71 @@ cols_binary = get_df_types(df_train, 'bool')
 cols_str = get_df_types(df_train, 'object')
 
 mapper = DataFrameMapper([
-#    (cols_str, preprocessing.LabelBinarizer()),
+    (cols_numeric, preprocessing.StandardScaler()),
+    ('school_state', preprocessing.LabelBinarizer()),
+    ('school_charter', preprocessing.LabelBinarizer()),
+    ('school_magnet', preprocessing.LabelBinarizer()),
+    ('school_year_round', preprocessing.LabelBinarizer()),
+    ('school_nlns', preprocessing.LabelBinarizer()),
+    ('school_kipp', preprocessing.LabelBinarizer()),
+    ('school_charter_ready_promise', preprocessing.LabelBinarizer()),
     ('teacher_prefix', preprocessing.LabelBinarizer()),
-#    (cols_numeric, preprocessing.StandardScaler())
+    ('teacher_teach_for_america', preprocessing.LabelBinarizer()),
+    ('teacher_ny_teaching_fellow', preprocessing.LabelBinarizer()),
+    ('primary_focus_area', preprocessing.LabelBinarizer()),
+    ('resource_type', preprocessing.LabelBinarizer()),
+    ('poverty_level', preprocessing.LabelBinarizer()),
+    ('grade_level', preprocessing.LabelBinarizer()),
 ])
 
-tmp = mapper.fit_transform(df_train.copy())
+# tmp = mapper.fit_transform(df_train.copy())
+mapper.fit_transform(df_train.copy())
+feature_names = mapper.transformed_names_
+
+score = metrics.make_scorer(metrics.accuracy_score)
+Cs =  10 ** np.array(range(-2, 4)) + .001
+logistic = LogisticRegression(penalty='l1')
+#logistic.fit(mapper.fit_transform(X_train),Y_train)
+
+pipe = Pipeline(steps = [
+  ('mapper', mapper),
+  ('logistic', logistic)
+])
+
+#pipe.fit_transform(X_train, Y_train)
+grid = GridSearchCV(
+    pipe,
+    dict(logistic__C = Cs),
+    cv = 5,
+    scoring = score
+)
+grid.fit(X_train, Y_train)
+print("Best parameters set found on development set:")
+print()
+print(grid.best_params_)
+print()
+print("Grid scores on development set:")
+print()
+
+means = grid.cv_results_['mean_test_score']
+stds = grid.cv_results_['std_test_score']
+for mean, std, params in zip(means, stds, grid.cv_results_['params']):
+    print("%0.3f (+/-%0.03f) for %r"
+          % (mean, std * 2, params))
+print()
+print("Detailed classification report:")
+print()
+print("The model is trained on the full development set.")
+print("The scores are computed on the full evaluation set.")
+print()
+# Testing trained algorithm on Test Data
+y_true, y_pred = Y_test, grid.predict(X_test)
+# printing Classification report
+print(metrics.classification_report(y_true, y_pred,target_names= None))
+print()
+
 
 sys.exit()
-# scale the numeric columns
-scaler = preprocessing.StandardScaler()
-mod_logit = LogisticRegression(penalty='l2')
-mod_logit.fit(scaler.transform(X_train),Y_train)
-
-mapper = pd.DataFrameMapper(
-  [(continuous_col, StandardScaler()) for continuous_col in continuous_cols] +
-  [(categorical_col, LabelBinarizer()) for categorical_col in categorical_cols]
-)
-pipeline = Pipeline(
-  ("mapper", mapper)
-)
-pipeline.fit_transform(df, df["y"])
-
 # save the scaler and the model
 filename_model = 'models/mod_logit_simple.pkl'
 filename_scaler = 'models/mod_logit_simple_scaler.pkl'
@@ -114,85 +159,3 @@ print(mod_logit.predict(scaler.transform(new_data)))
 print(mod_logit_reload.predict(scaler_reload.transform(new_data)))
 print(mod_logit.predict_proba(scaler.transform(new_data)))
 
-"""
-# ## Logistic Regression Pipeline
-
-# In[47]:
-
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import make_scorer
-from sklearn.model_selection import GridSearchCV
-from sklearn.preprocessing import scale
-
-#Y_train = df['funded'] 
-#X_train = df[['total_price_excluding_optional_support', 'students_reached']]
-
-
-# In[50]:
-
-# scale my data
-prep = preprocessing.StandardScaler()
-# encode categorical variables
-#enc = preprocessing.OneHotEncoder()
-# Using a LogisticRegression with l1 penalty (Lasso)
-Classifier = LogisticRegression(penalty="l1")
-# choose metric
-score = make_scorer(accuracy_score)
-# C parameter space
-Cs = 10 ** np.array(range(-2, 4))
-
-# Setting up Pipeline
-pipe = Pipeline(steps=[('preprocess', prep), ('logistic', Classifier)])
-
-# Hyperparameter space parameters to be evaluated by a grid search
-#n_components = range(60,70,5) # number of Principle components retained
-#Cs = np.logspace(0, 4, 5) # Strength of L1 regularization
-#n_components = [65,66]
-#Cs =[1]
-# Tuning hyper-parameters using Grid Search and 5 fold Cross-Validation
-print("# Tuning hyper-parameters for %s" % score)
-print()
-Logistic = GridSearchCV(pipe,
-                     dict(logistic__C = Cs),
-                     cv = 5,
-                     scoring = score)
-# Training best model using results from Grid Search
-Logistic.fit(X_train_scale, Y_train)
-print("Best parameters set found on development set:")
-print()
-print(Logistic.best_params_)
-print()
-print("Grid scores on development set:")
-print()
-
-
-# In[59]:
-
-means = Logistic.cv_results_['mean_test_score']
-stds = Logistic.cv_results_['std_test_score']
-for mean, std, params in zip(means, stds, Logistic.cv_results_['params']):
-    print("%0.3f (+/-%0.03f) for %r"
-          % (mean, std * 2, params))
-print()
-
-
-# In[ ]:
-
-[8:24] 
-```
-```
-
-[8:24] 
- ```print("Detailed classification report:")
-print()
-print("The model is trained on the full development set.")
-print("The scores are computed on the full evaluation set.")
-print()
-# Testing trained algorithm on Test Data
-y_true, y_pred = Y_test, Logistic.predict(X_test)
-# printing Classification report
-print(classification_report(y_true, y_pred,target_names=class_names))
-print()```
-"""
