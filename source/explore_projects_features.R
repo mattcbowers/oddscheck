@@ -37,6 +37,7 @@ plot(mod_bestsub)
 plot(mod_bestsub_sum$bic)
 which.min(mod_bestsub_sum$bic)
 coef(mod_bestsub, 16)
+coef(mod_bestsub, 5)
 # 16 (lowest so far)
 
 # Forward Selection

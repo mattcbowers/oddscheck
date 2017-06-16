@@ -55,8 +55,8 @@ def get_data(fname, frac_na_tolerable = 0.05):
 #df_train = get_data('data_csv/projects/projects.csv.aa')
 #df_test = get_data('data_csv/projects/projects.csv.ab')
 
-# fname = 'data_csv/projects/projects.csv.ab'
-fname = 'data/opendata_projects000.gz'
+fname = 'data_csv/projects/projects.csv.ab'
+# fname = 'data/opendata_projects000.gz'
 
 df = get_data(fname)
 (df_train, df_test) = train_test_split(df, train_size = .67, random_state = 27)
@@ -81,22 +81,41 @@ cols_numeric = get_df_types(df_train, 'float64')
 cols_binary = get_df_types(df_train, 'bool')
 cols_str = get_df_types(df_train, 'object')
 
+#mapper = DataFrameMapper([
+#    ('total_price_excluding_optional_support', preprocessing.StandardScaler()),
+#    ('students_reached', preprocessing.StandardScaler()),
+#    ('school_state', preprocessing.LabelBinarizer()),
+#    ('school_charter', preprocessing.LabelBinarizer()),
+#    ('school_magnet', preprocessing.LabelBinarizer()),
+#    ('school_year_round', preprocessing.LabelBinarizer()),
+#    ('school_nlns', preprocessing.LabelBinarizer()),
+#    ('school_kipp', preprocessing.LabelBinarizer()),
+#    ('school_charter_ready_promise', preprocessing.LabelBinarizer()),
+#    ('teacher_prefix', preprocessing.LabelBinarizer()),
+#    ('teacher_teach_for_america', preprocessing.LabelBinarizer()),
+#    ('teacher_ny_teaching_fellow', preprocessing.LabelBinarizer()),
+#    ('primary_focus_area', preprocessing.LabelBinarizer()),
+#    ('resource_type', preprocessing.LabelBinarizer()),
+#    ('poverty_level', preprocessing.LabelBinarizer()),
+#    ('grade_level', preprocessing.LabelBinarizer()),
+#])
+
 mapper = DataFrameMapper([
     ('total_price_excluding_optional_support', preprocessing.StandardScaler()),
-    ('students_reached', preprocessing.StandardScaler()),
-    ('school_state', preprocessing.LabelBinarizer()),
-    ('school_charter', preprocessing.LabelBinarizer()),
-    ('school_magnet', preprocessing.LabelBinarizer()),
-    ('school_year_round', preprocessing.LabelBinarizer()),
-    ('school_nlns', preprocessing.LabelBinarizer()),
-    ('school_kipp', preprocessing.LabelBinarizer()),
-    ('school_charter_ready_promise', preprocessing.LabelBinarizer()),
-    ('teacher_prefix', preprocessing.LabelBinarizer()),
-    ('teacher_teach_for_america', preprocessing.LabelBinarizer()),
-    ('teacher_ny_teaching_fellow', preprocessing.LabelBinarizer()),
-    ('primary_focus_area', preprocessing.LabelBinarizer()),
+#    ('students_reached', preprocessing.StandardScaler()),
+#    ('school_state', preprocessing.LabelBinarizer()),
+#    ('school_charter', preprocessing.LabelBinarizer()),
+#    ('school_magnet', preprocessing.LabelBinarizer()),
+#    ('school_year_round', preprocessing.LabelBinarizer()),
+#    ('school_nlns', preprocessing.LabelBinarizer()),
+#    ('school_kipp', preprocessing.LabelBinarizer()),
+#    ('school_charter_ready_promise', preprocessing.LabelBinarizer()),
+#    ('teacher_prefix', preprocessing.LabelBinarizer()),
+#    ('teacher_teach_for_america', preprocessing.LabelBinarizer()),
+#    ('teacher_ny_teaching_fellow', preprocessing.LabelBinarizer()),
+#    ('primary_focus_area', preprocessing.LabelBinarizer()),
     ('resource_type', preprocessing.LabelBinarizer()),
-    ('poverty_level', preprocessing.LabelBinarizer()),
+#    ('poverty_level', preprocessing.LabelBinarizer()),
     ('grade_level', preprocessing.LabelBinarizer()),
 ])
 
@@ -152,6 +171,16 @@ print('coefficients of best model')
 best = grid.best_estimator_.named_steps['logistic']
 fitted_coefs = pd.DataFrame({'name':feature_names, 'coef':best.coef_[0]}).sort('coef')
 print(fitted_coefs)
+#xx=pd.DataFrame({
+#    'total_price_excluding_optional_support':1000,
+#    'resource_type': 'Trips',
+#    'grade_level': 'Grades 9-12'
+#})
+#print(grid.best_estimator_.predict(xx))
+import matplotlib.pyplot as plt
+
+
+
 
 sys.exit()
 # save the scaler and the model
