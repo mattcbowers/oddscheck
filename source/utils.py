@@ -63,3 +63,13 @@ class ProjectsData(object):
             return(df_balance)
         self.df_train = downsample_majority(self.df_train)
         self.df_test = downsample_majority(self.df_test)
+
+    def X_Y_split(self, y_col = 'funded'):
+        def df_to_X(df):
+            return(df.drop(y_col, axis = 1))
+        def df_to_Y(df):
+            return(df[y_col])
+        self.X_train = df_to_X(self.df_train)
+        self.Y_train = df_to_Y(self.df_train)
+        self.X_test = df_to_X(self.df_test)
+        self.Y_test = df_to_Y(self.df_test)

@@ -26,33 +26,7 @@ projects.get_data()
 projects.sample(frac = .5)
 projects.train_test_split(train_size = .67)
 projects.balance()
-
-print(projects.df_test.funded.mean())
-
-sys.exit()
-# balance the test and train sets
-def make_balanced(df):
-    num_true = df.funded.sum()
-    num_false = df.shape[0] - num_true
-    df_false= df[df['funded'] == False]
-    df_true = df[df['funded'] == True]
-    df_true_sub = df_true.sample(n = num_false)
-    df_balance = pd.concat([df_true_sub, df_false])
-    return(df_balance)
-
-df_train = make_balanced(df_train_raw)
-df_test = make_balanced(df_test_raw)
-
-# Split data into test and training
-def df_to_X(df):
-    return(df.drop('funded', axis = 1))
-def df_to_Y(df):
-    return(df['funded'])
-
-X_train = df_to_X(df_train)
-Y_train = df_to_Y(df_train)
-X_test = df_to_X(df_test)
-Y_test = df_to_Y(df_test)
+projects.X_Y_split(y_col = 'funded')
 
 # Make lists of the different kinds of columns
 def get_df_types(df, my_type):
