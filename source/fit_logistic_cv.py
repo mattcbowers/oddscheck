@@ -10,7 +10,7 @@ from sklearn_pandas import DataFrameMapper, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
-from source.utils import get_data
+from source.utils import ProjectsData
 import random
 random.seed(55)
 
@@ -20,12 +20,13 @@ random.seed(55)
 fname = 'data_csv/projects/projects.csv.ab'
 # fname = 'data/opendata_projects000.gz'
 
-df = get_data(fname)
+#df = get_data(fname)
+projects = ProjectsData(fname)
+projects.get_data()
+projects.sample(frac = .5)
+projects.train_test_split(train_size = .67)
+
 sys.exit()
-df = df.sample(frac = .5)
-
-(df_train_raw, df_test_raw) = train_test_split(df, train_size = .67, random_state = 27)
-
 # balance the test and train sets
 def make_balanced(df):
     num_true = df.funded.sum()
