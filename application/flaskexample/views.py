@@ -2,6 +2,7 @@ from flask import render_template
 from flask import request
 from flaskexample import app
 from .utils import generate_output
+from .utils import generate_maybe
 #import flaskexample.utils
 # from sqlalchemy import create_engine
 # from sqlalchemy_utils import database_exists, create_database
@@ -18,11 +19,11 @@ def index():
 @app.route('/go')
 def go():
     query = request.args.get('query', '')
-    query2 = request.args.get('query2', '')
     # out_text = query.upper()
     out_text = generate_output(query)
+    maybe_text = generate_maybe(query)
     return render_template(
         'go.html',
         out_text = out_text,
-        out_text2 = 'hello world',
+        maybe_text = maybe_text,
     )

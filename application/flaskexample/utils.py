@@ -16,3 +16,10 @@ def generate_output(query):
     prob_str = str(int(round(100 * prob))) + '%'
     out_str = 'Proposed cost: $' + query + ' Funding probability: ' + prob_str
     return(out_str)
+
+def generate_maybe(query):
+    if (float(query) > 1233):
+        out_str = 'Consider requesting: $1233, Funding probability: 63%' 
+    else:
+        out_str = ''
+    return(out_str)

@@ -21,8 +21,24 @@
 
         {% block content %}
         <form method="get" action="/go">
+            <br>
+            <select name="resource">
+              <option value="volvo">Books</option>
+              <option value="saab">Supplies</option>
+              <option value="fiat">Trip</option>
+              <option value="audi">Technology</option>
+              <option value="audi">Visitors</option>
+            </select>
+            <br>
+            <select name="grade">
+              <option value="volvo">Pre K - 2</option>
+              <option value="saab">3 - 5</option>
+              <option value="fiat">6 - 8</option>
+              <option value="audi">9 - 12</option>
+            </select>
+            <p>
             <input type="text" name="query" placeholder="Enter project cost">
-            <input type="text" name="query2" placeholder="Enter project cost">
+            </p>
             <button type="submit" name="push">Submit</button>
         </form>
         {% endblock %}
