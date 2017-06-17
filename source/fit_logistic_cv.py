@@ -25,6 +25,9 @@ projects = ProjectsData(fname)
 projects.get_data()
 projects.sample(frac = .5)
 projects.train_test_split(train_size = .67)
+projects.balance()
+
+print(projects.df_test.funded.mean())
 
 sys.exit()
 # balance the test and train sets

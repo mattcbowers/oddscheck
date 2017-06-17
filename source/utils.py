@@ -50,5 +50,16 @@ class ProjectsData(object):
         self.df.sample(frac = frac)
 
     def train_test_split(self, train_size):
-        (self.df_train_raw, self.df_test_raw) = train_test_split(self.df, train_size = train_size, random_state = 27)
-        
+        (self.df_train, self.df_test) = train_test_split(self.df, train_size = train_size, random_state = 27)
+
+    def balance(self):
+        def downsample_majority(df):
+            num_true = df.funded.sum()
+            num_false = df.shape[0] - num_true
+            df_false= df[df['funded'] == False]
+            df_true = df[df['funded'] == True]
+            df_true_sub = df_true.sample(n = num_false)
+            df_balance = pd.concat([df_true_sub, df_false])
+            return(df_balance)
+        self.df_train = downsample_majority(self.df_train)
+        self.df_test = downsample_majority(self.df_test)
