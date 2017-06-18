@@ -1,4 +1,4 @@
-# Fit a full Logistic Regression using all ~20 features
+# Fit a Lasso Logistic Regression using all 16 features
 import numpy as np
 import pandas as pd
 import pickle
@@ -16,8 +16,8 @@ warnings.filterwarnings('ignore')
 import random
 random.seed(55)
 
-fname = 'data_csv/projects/projects.csv.ab'
-# fname = 'data/opendata_projects000.gz'
+# fname = 'data_csv/projects/projects.csv.ab'
+fname = 'data/opendata_projects000.gz'
 
 projects = ProjectsData(fname)
 projects.get_data()
@@ -57,7 +57,11 @@ mapper.fit_transform(X_train.copy())
 feature_names = mapper.transformed_names_
 
 # fit logistic with fixed C
-C0 = .001
+# C0 = .001
+# C0 = .0005
+# C0 = .0004 # adds NY and Literacy from .0003
+C0 = .0003 # nice
+# C0 = .0001
 print('C =  ' + str(C0))
 logistic0 = LogisticRegression(penalty='l1', C = C0)
 pipe0 = Pipeline(steps = [
@@ -77,10 +81,10 @@ y_true, y_pred = Y_test, pipe0.predict(X_test)
 print(metrics.classification_report(y_true, y_pred,target_names= None))
 print()
 
-#score = metrics.make_scorer(metrics.accuracy_score)
-score = metrics.make_scorer(metrics.f1_score)
-Cs =  10 ** np.array(range(-2, 4)) + .001
-logistic = LogisticRegression(penalty='l1')
-#logistic.fit(mapper.fit_transform(X_train),Y_train)
-
+# Pckle the fitted pipeline and the model coefs
+import pickle
+filename_model = 'models/mod_logit_lasso.pkl'
+filename_coefs = 'source/data_pkl/coef_lasso.pkl'
+pickle.dump(logistic0, open(filename_model, 'wb'))
+pickle.dump(fitted_coefs, open(filename_coefs, 'wb'))
 
