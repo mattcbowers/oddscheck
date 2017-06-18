@@ -21,8 +21,9 @@
 
         {% block content %}
         <form method="get" action="/go">
+            <label for="resource">Resource Type</label>
             <select name="resource">
-              <option value="" selected="selected">Resource Type</option>
+              <option disabled selected value> -- select an option -- </option>
               <option value="Books">Books</option>
               <option value="Technology">Technology</option>
               <option value="Trips">Trips</option>
@@ -30,29 +31,33 @@
               <option value="Visitors">Visitors</option>
               <option value="Other">Other</option>
             </select>
+            <label for="grade">Grade Level</label>
             <select name="grade">
-              <option value="" selected="selected">Grade Level</option>
+              <option disabled selected value> -- select an option -- </option>
               <option value="Grades PreK-2">PreK-2</option>
               <option value="Grades 3-5">3-5</option>
               <option value="Grades 6-8">6-8</option>
               <option value="Grades 9-12">9-12</option>
             </select>
+            <label for="prefix">Teacher Prefix</label>
             <select name="prefix">
-              <option value="" selected="selected">Teacher Prefix</option>
+              <option disabled selected value> -- select an option -- </option>
               <option value="Ms.">Ms.</option>
               <option value="Mrs.">Mrs.</option>
               <option value="Mr.">Mr.</option>
               <option value="Dr.">Dr.</option>
             </select>
+            <label for="poverty">School Poverty Level</label>
             <select name="poverty">
-              <option value="" selected="selected">School Poverty Level</option>
+              <option disabled selected value> -- select an option -- </option>
               <option value="highest poverty">Highest</option>
               <option value="high poverty">High</option>
               <option value="moderate poverty">Moderate</option>
               <option value="low poverty">Low</option>
             </select>
+            <label for="state">School State</label>
             <select name="state" id="state">
-              <option value="" selected="selected">School State</option>
+              <option disabled selected value> -- select an option -- </option>
               <option value="AL">Alabama</option>
               <option value="AK">Alaska</option>
               <option value="AZ">Arizona</option>
