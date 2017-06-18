@@ -9,34 +9,29 @@ import sys
 from sklearn_pandas import DataFrameMapper, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import train_test_split
+#from sklearn.model_selection import train_test_split
 from source.utils import ProjectsData
+import warnings
+warnings.filterwarnings('ignore')
 import random
 random.seed(55)
-
-#df_train = get_data('data_csv/projects/projects.csv.aa')
-#df_test = get_data('data_csv/projects/projects.csv.ab')
 
 fname = 'data_csv/projects/projects.csv.ab'
 # fname = 'data/opendata_projects000.gz'
 
-#df = get_data(fname)
 projects = ProjectsData(fname)
 projects.get_data()
 projects.sample(frac = .5)
 projects.train_test_split(train_size = .67)
 projects.balance()
 projects.X_Y_split(y_col = 'funded')
+X_train = projects.X_train
+Y_train = projects.Y_train
+X_test = projects.X_test
+Y_test = projects.Y_test
 
-# Make lists of the different kinds of columns
-def get_df_types(df, my_type):
-    mylist = list(df.select_dtypes(include=[my_type]).columns)
-    return(mylist)
 
-cols_numeric = get_df_types(df_train, 'float64')
-cols_binary = get_df_types(df_train, 'bool')
-cols_str = get_df_types(df_train, 'object')
-
+# Modeling -------------------------------------------------------------
 mapper = DataFrameMapper([
     ('total_price_excluding_optional_support', preprocessing.StandardScaler()),
     ('students_reached', preprocessing.StandardScaler()),
@@ -78,7 +73,7 @@ mapper = DataFrameMapper([
 """
 
 # tmp = mapper.fit_transform(df_train.copy())
-mapper.fit_transform(df_train.copy())
+mapper.fit_transform(X_train.copy())
 feature_names = mapper.transformed_names_
 
 # fit logistic with fixed C
@@ -108,6 +103,9 @@ Cs =  10 ** np.array(range(-2, 4)) + .001
 logistic = LogisticRegression(penalty='l1')
 #logistic.fit(mapper.fit_transform(X_train),Y_train)
 
+
+sys.exit()
+# Grid Search Cross Validation to choose C -----------------------------
 pipe = Pipeline(steps = [
   ('mapper', mapper),
   ('logistic', logistic)
