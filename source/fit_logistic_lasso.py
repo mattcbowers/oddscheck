@@ -88,3 +88,7 @@ filename_coefs = 'source/data_pkl/coef_lasso.pkl'
 pickle.dump(logistic0, open(filename_model, 'wb'))
 pickle.dump(fitted_coefs, open(filename_coefs, 'wb'))
 
+# write the fitted coefs to a csv
+fitted_coefs.to_csv('source/data_pkl/coef_lasso.csv', header=None, index=None, mode='a')
+
+
