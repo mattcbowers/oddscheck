@@ -3,6 +3,7 @@ from flask import request
 from flaskexample import app
 from .utils import generate_output
 from .utils import generate_maybe
+from .utils import get_probability
 #import flaskexample.utils
 # from sqlalchemy import create_engine
 # from sqlalchemy_utils import database_exists, create_database
@@ -29,10 +30,13 @@ def go():
     out_text = generate_output(query)
     maybe_text = generate_maybe(query)
     echo = ' , '.join([resource, grade, prefix, state, poverty, query])
+    # Real model function
+    res = get_probability(resource, grade, prefix, state, poverty, query)
     # Render the output page
     return render_template(
         'go.html',
         out_text = out_text,
         maybe_text = maybe_text,
         echo = echo,
+        res = res,
     )
