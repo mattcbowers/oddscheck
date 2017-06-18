@@ -1,11 +1,9 @@
 .DS_Store
 .ipynb_checkpoints
-data
-data_csv
+data*
 docs
 figures
 models
 slides
 *.pyc
-data_rds
 .Rapp.History
