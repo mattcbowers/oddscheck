@@ -58,7 +58,7 @@ mapper.fit_transform(X_train.copy())
 feature_names = mapper.transformed_names_
 
 # fit logistic with fixed C
-# C0 = .0001
+C0 = .0001
 print('C =  ' + str(C0))
 logistic0 = LogisticRegression(penalty='l1', C = C0)
 pipe0 = Pipeline(steps = [
