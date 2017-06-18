@@ -82,10 +82,9 @@ print(metrics.classification_report(y_true, y_pred,target_names= None))
 print()
 
 # Pckle the fitted pipeline and the model coefs
-import pickle
-filename_model = 'models/mod_logit_lasso.pkl'
+filename_model = 'models/pipe_logit_lasso.pkl'
 filename_coefs = 'source/data_pkl/coef_lasso.pkl'
-pickle.dump(logistic0, open(filename_model, 'wb'))
+pickle.dump(pipe0, open(filename_model, 'wb'))
 pickle.dump(fitted_coefs, open(filename_coefs, 'wb'))
 
 # write the fitted coefs to a csv
