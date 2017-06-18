@@ -18,12 +18,21 @@ def index():
 
 @app.route('/go')
 def go():
+    # Get Inputs
+    resource = request.args.get('resource', '')
+    grade = request.args.get('grade', '')
+    prefix = request.args.get('prefix', '')
+    state = request.args.get('state', '')
+    poverty = request.args.get('poverty', '')
     query = request.args.get('query', '')
-    # out_text = query.upper()
+    # Get the outputs
     out_text = generate_output(query)
     maybe_text = generate_maybe(query)
+    echo = ' , '.join([resource, grade, prefix, state, poverty, query])
+    # Render the output page
     return render_template(
         'go.html',
         out_text = out_text,
         maybe_text = maybe_text,
+        echo = echo,
     )
