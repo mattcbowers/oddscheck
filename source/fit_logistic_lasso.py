@@ -21,7 +21,7 @@ fname = 'data/opendata_projects000.gz'
 
 projects = ProjectsData(fname)
 projects.get_data()
-projects.sample(frac = .5)
+# projects.sample(frac = .5)
 projects.train_test_split(train_size = .67)
 projects.balance()
 projects.X_Y_split(y_col = 'funded')
