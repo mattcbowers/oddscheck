@@ -35,7 +35,7 @@ class ProjectsData(object):
         price_cap = 10000
         students_reached_cap = 10000
         self.df = self.df[self.df['students_reached'] < students_reached_cap]
-        self.df = self.df[self.df['total_price_excluding_optional_support'] < price_cap]
+#        self.df = self.df[self.df['total_price_excluding_optional_support'] < price_cap]
         print("Removing outliers")
         print(self.df.shape)
         # remove rows with NA
