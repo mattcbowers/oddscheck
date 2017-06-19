@@ -20,7 +20,12 @@
         </header>
 
         {% block content %}
+        Enter the details of your DonorsChoose project below, 
+        and OddsCheck will estimate the probability of funding success.
+        Alternatively, you can choose one of the hypothetical projects below 
+        to see how it works.
         <form method="get" action="/go">
+          <p>
             <label for="resource">Resource Type</label>
             <select name="resource">
               <option disabled selected value> -- select an option -- </option>
@@ -31,6 +36,8 @@
               <option value="Visitors">Visitors</option>
               <option value="Other">Other</option>
             </select>
+          </p>
+          <p>
             <label for="grade">Grade Level</label>
             <select name="grade">
               <option disabled selected value> -- select an option -- </option>
@@ -39,6 +46,8 @@
               <option value="Grades 6-8">6-8</option>
               <option value="Grades 9-12">9-12</option>
             </select>
+          </p>
+          <p>
             <label for="prefix">Teacher Prefix</label>
             <select name="prefix">
               <option disabled selected value> -- select an option -- </option>
@@ -47,6 +56,8 @@
               <option value="Mr.">Mr.</option>
               <option value="Dr.">Dr.</option>
             </select>
+          </p>
+          <p>
             <label for="poverty">School Poverty Level</label>
             <select name="poverty">
               <option disabled selected value> -- select an option -- </option>
@@ -55,6 +66,8 @@
               <option value="moderate poverty">Moderate</option>
               <option value="low poverty">Low</option>
             </select>
+          </p>
+          <p>
             <label for="state">School State</label>
             <select name="state" id="state">
               <option disabled selected value> -- select an option -- </option>
@@ -110,9 +123,10 @@
               <option value="WI">Wisconsin</option>
               <option value="WY">Wyoming</option>
             </select>
-            <p>
+          </p>
+          <p>
             <input type="text" name="query" placeholder="Enter project cost">
-            </p>
+          </p>
             <button type="submit" name="push">Submit</button>
         </form>
         {% endblock %}
