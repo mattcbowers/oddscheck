@@ -31,12 +31,13 @@ def go():
     maybe_text = generate_maybe(query)
     echo = ' , '.join([resource, grade, prefix, state, poverty, query])
     # Real model function
-    res = get_probability(resource, grade, prefix, state, poverty, query)
+    res1, res2 = get_probability(resource, grade, prefix, state, poverty, query)
     # Render the output page
     return render_template(
         'go.html',
         out_text = out_text,
         maybe_text = maybe_text,
         echo = echo,
-        res = res,
+        res1 = res1,
+        res2 = res2,
     )

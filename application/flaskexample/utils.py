@@ -7,6 +7,7 @@ from sklearn import metrics
 import sys
 from sklearn_pandas import DataFrameMapper, cross_val_score
 from sklearn.pipeline import Pipeline
+from scipy import optimize
 
 
 import pandas as pd
@@ -61,5 +62,20 @@ def get_probability(resource, grade, prefix, state, poverty, query):
     pipe = pickle.load(open(filename_model, 'rb'))
     prob = pipe.predict_proba(new_data)[0, 1]
     prob_str = str(int(round(100 * prob))) + '%'
-    out_str = 'Proposed cost: $' + query + ' Funding probability: ' + prob_str
-    return(out_str)
+    # Add optimal price recommendation
+    def expected_payoff(price, row, pipe):
+        row.total_price_excluding_optional_support = price
+        p_hat = pipe.predict_proba(row)[0, 1]
+        expected = p_hat * price
+        return(-expected)
+    opt = optimize.minimize_scalar(expected_payoff, args = (new_data, pipe), options = {'disp':False})
+    price_opt = opt.x
+    opt_data = new_data.copy()
+    opt_data.total_price_excluding_optional_support = price_opt
+    prob_opt = pipe.predict_proba(opt_data)[0, 1]
+    prob_opt_str = str(int(round(100 * prob_opt))) + '%'
+    out_str1 = 'Proposed cost: $' + query + ' Funding probability: ' + prob_str
+    out_str2 = ''
+    if price > price_opt:
+        out_str2 = 'Recommended cost: $' + str(int(round(price_opt))) + ' Funding probability: ' + prob_opt_str
+    return(out_str1, out_str2)
