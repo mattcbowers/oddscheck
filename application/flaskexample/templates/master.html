@@ -11,21 +11,21 @@
         <!-- Place favicon.ico in the root directory -->
 
         <link rel="stylesheet" href="/static/css/normalize.css">
-        <link rel="stylesheet" href="/static/css/main.css">
+        <link rel="stylesheet" href="/static/css/skeleton.css">
+        <link rel="stylesheet" href="/static/css/style.css">
         <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
     <body>
-        <header>
-            <h1>OddsCheck</h1>
-        </header>
-
-        {% block content %}
-        Enter the details of your DonorsChoose project below, 
+      <!-- .container is main centered wrapper -->
+      <div class="container u-max-full-width">
+        <h1>OddsCheck</h1>
+        <p>Enter the details of your DonorsChoose project below, 
         and OddsCheck will estimate the probability of funding success.
         Alternatively, you can choose one of the hypothetical projects below 
-        to see how it works.
-        <form method="get" action="/go">
-          <p>
+        to see how it works.</p>
+        <form method="post">
+          <div class="row">
+          <div class="two columns">
             <label for="resource">Resource Type</label>
             <select name="resource">
               <option disabled selected value> -- select an option -- </option>
@@ -36,8 +36,8 @@
               <option value="Visitors">Visitors</option>
               <option value="Other">Other</option>
             </select>
-          </p>
-          <p>
+          </div>
+          <div class="two columns">
             <label for="grade">Grade Level</label>
             <select name="grade">
               <option disabled selected value> -- select an option -- </option>
@@ -46,8 +46,8 @@
               <option value="Grades 6-8">6-8</option>
               <option value="Grades 9-12">9-12</option>
             </select>
-          </p>
-          <p>
+          </div>
+          <div class="two columns">
             <label for="prefix">Teacher Prefix</label>
             <select name="prefix">
               <option disabled selected value> -- select an option -- </option>
@@ -56,8 +56,8 @@
               <option value="Mr.">Mr.</option>
               <option value="Dr.">Dr.</option>
             </select>
-          </p>
-          <p>
+          </div>
+          <div class="two columns">
             <label for="poverty">School Poverty Level</label>
             <select name="poverty">
               <option disabled selected value> -- select an option -- </option>
@@ -66,8 +66,8 @@
               <option value="moderate poverty">Moderate</option>
               <option value="low poverty">Low</option>
             </select>
-          </p>
-          <p>
+          </div>
+          <div class="two columns">
             <label for="state">School State</label>
             <select name="state" id="state">
               <option disabled selected value> -- select an option -- </option>
@@ -123,18 +123,47 @@
               <option value="WI">Wisconsin</option>
               <option value="WY">Wyoming</option>
             </select>
-          </p>
-          <p>
+          </div>
+          <div class="two columns">
+            <label>Project Cost</label>
             <input type="text" name="query" placeholder="Enter project cost">
-          </p>
-            <button type="submit" name="push">Submit</button>
+          </div>
+        </div>  <!-- row -->
+        <hr/>
+        <div class="row">
+          <input class="button-primary" type="submit" value="submit input">
+          <button id="btn-prefil-a">Pre-fill A</button>
+          <button id="btn-prefil-b">Pre-Fill B</button>
+        </div>
         </form>
-        {% endblock %}
+
+        <!-- Results go here -->
+        <div class="row">
+          <p>{{res1}}</p>
+          <p>{{res2}}</p>
+        </div>
+        <!-- {{ res_df | safe }}  -->
+      </div>  <!-- Container -->
+
 
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
         <script src="/static/js/plugins.js"></script>
         <script src="/static/js/main.js"></script>
-
+        <script>
+          $("#btn-prefil-a").click(function(e) {
+            $("select[name='resource']").val("Technology");
+            $("select[name='grade']").val("Grades 3-5");
+            $("select[name='prefix']").val("Mrs.");
+            $("select[name='poverty']").val("moderate poverty");
+            $("select[name='state']").val("CA");
+            $("input[name='query']").val("2500");
+            e.preventDefault();
+          });
+          $("#btn-prefil-b").click(function(e) {
+            $("select[name='grade']").val("Grades 3-5");
+            e.preventDefault();
+          });
+        </script>
     </body>
 </html>
