@@ -74,8 +74,8 @@ def get_probability(resource, grade, prefix, state, poverty, query):
     opt_data.total_price_excluding_optional_support = price_opt
     prob_opt = pipe.predict_proba(opt_data)[0, 1]
     prob_opt_str = str(int(round(100 * prob_opt))) + '%'
-    out_str1 = 'Proposed cost: $' + query + ' Funding probability: ' + prob_str
+    out_str1 = 'Proposed price: $' + query + ' Funding probability: ' + prob_str
     out_str2 = ''
     if price > price_opt:
-        out_str2 = 'Recommended cost: $' + str(int(round(price_opt))) + ' Funding probability: ' + prob_opt_str
+        out_str2 = 'Recommended price: $' + str(int(round(price_opt))) + ' Funding probability: ' + prob_opt_str
     return(out_str1, out_str2)
