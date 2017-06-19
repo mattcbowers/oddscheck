@@ -8,6 +8,8 @@ import sys
 from sklearn_pandas import DataFrameMapper, cross_val_score
 from sklearn.pipeline import Pipeline
 from scipy import optimize
+import warnings
+warnings.filterwarnings('ignore')
 
 
 import pandas as pd
