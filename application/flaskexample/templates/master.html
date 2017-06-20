@@ -21,7 +21,7 @@
         <h1>OddsCheck</h1>
         <p>Enter the details of your DonorsChoose project below, 
         and OddsCheck will estimate the probability of funding success.
-        Alternatively, you can choose one of the hypothetical projects below 
+        Alternatively, you can choose one of the presets below 
         to see how it works.</p>
         <form method="post">
           <div class="row">
@@ -131,18 +131,13 @@
         </div>  <!-- row -->
         <hr/>
         <div class="row">
-          <input class="button-primary" type="submit" value="submit input">
-          <button id="btn-prefil-a">Pre-fill A</button>
-          <button id="btn-prefil-b">Pre-Fill B</button>
+          <input class="button-primary" type="submit" value="what are the odds">
+          <button id="btn-prefil-a">trip to the zoo</button>
+          <button id="btn-prefil-b">laptops for everyone</button>
         </div>
         </form>
 
         <!-- Results go here -->
-        <div class="row">
-          <p>{{res1}}</p>
-          <p>{{res2}}</p>
-        </div>
-        <!-- {{ res_df | safe }}  -->
         {{ res_df | safe }} 
       </div>  <!-- Container -->
 
@@ -153,16 +148,21 @@
         <script src="/static/js/main.js"></script>
         <script>
           $("#btn-prefil-a").click(function(e) {
-            $("select[name='resource']").val("Technology");
+            $("select[name='resource']").val("Trips");
             $("select[name='grade']").val("Grades 3-5");
-            $("select[name='prefix']").val("Mrs.");
+            $("select[name='prefix']").val("Mr.");
             $("select[name='poverty']").val("moderate poverty");
-            $("select[name='state']").val("CA");
-            $("input[name='query']").val("2500");
+            $("select[name='state']").val("IN");
+            $("input[name='query']").val("1000");
             e.preventDefault();
           });
           $("#btn-prefil-b").click(function(e) {
-            $("select[name='grade']").val("Grades 3-5");
+            $("select[name='resource']").val("Technology");
+            $("select[name='grade']").val("Grades PreK-2");
+            $("select[name='prefix']").val("Mrs.");
+            $("select[name='poverty']").val("high poverty");
+            $("select[name='state']").val("AL");
+            $("input[name='query']").val("3000");
             e.preventDefault();
           });
         </script>
