@@ -16,7 +16,7 @@ import pandas as pd
 def index():
     res1 = ""
     res2 = ""
-    df = None
+    df = ''
     if request.method == "POST":
         # Get Inputs
         resource = request.form.get('resource', '')
@@ -34,10 +34,10 @@ def index():
           "Price": range(500, 5000, 500),
           "Confidence": range(10, 100, 10)
         })
-        df = df.to_html(index=False)
+        df = df.to_html(index=True)
     return render_template(
         'master.html',
         res1 = res1,
         res2 = res2,
-        res_df = df
+#        res_df = df
     )
