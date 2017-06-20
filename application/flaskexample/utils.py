@@ -81,3 +81,57 @@ def get_probability(resource, grade, prefix, state, poverty, query):
     if price > price_opt:
         out_str2 = 'Recommended price: $' + str(int(round(price_opt))) + ' Funding probability: ' + prob_opt_str
     return(out_str1, out_str2)
+
+def get_prob_df(resource, grade, prefix, state, poverty, query):
+    price = float(query)
+    # create data frame from inputs
+    # Note that 0 coef fields still need realistic values, but don't affect p
+    new_data = pd.DataFrame({
+        'total_price_excluding_optional_support': price,
+        'students_reached': 0,
+        'school_state': state,
+        'school_charter': 'f',
+        'school_magnet': 'f',
+        'school_year_round': 'f',
+        'school_nlns': 'f',
+        'school_kipp': 'f',
+        'school_charter_ready_promise': 'f',
+        'teacher_prefix': prefix,
+        'teacher_teach_for_america': 'f',
+        'teacher_ny_teaching_fellow': 'f',
+        'primary_focus_area': 'Applied Learning',
+        'resource_type': resource,
+        'poverty_level': poverty,
+        'grade_level': grade
+    }, index = [0])
+    filename_model = 'flaskexample/models/pipe_logit_lasso.pkl'
+    pipe = pickle.load(open(filename_model, 'rb'))
+    prob = pipe.predict_proba(new_data)[0, 1]
+
+    # Add optimal price recommendation
+    def expected_payoff(price, row, pipe):
+        row.total_price_excluding_optional_support = price
+        p_hat = pipe.predict_proba(row)[0, 1]
+        expected = p_hat * price
+        return(-expected)
+    opt = optimize.minimize_scalar(expected_payoff, args = (new_data, pipe), options = {'disp':False})
+    price_opt = opt.x
+    def prob_to_str(prob):
+        return(str(int(round(100 * prob))) + '%')
+    def price_to_str(price):
+        return('$' + str(int(round(price))))
+    if price > price_opt:
+        opt_data = new_data.copy()
+        opt_data.total_price_excluding_optional_support = price_opt
+        prob_opt = pipe.predict_proba(opt_data)[0, 1]
+        # Output Formatting
+        df = pd.DataFrame({
+            'Project Cost':[price_to_str(price), price_to_str(price_opt)],
+            'Funding Probability':[prob_to_str(prob), prob_to_str(prob_opt)]},
+        index = ['Input', 'Recommended'])
+    else :
+        df = pd.DataFrame({
+            'Project Cost':[price_to_str(price)],
+            'Funding Probability':[prob_to_str(prob)]},
+        index = ['Input'])
+    return(df[['Project Cost', 'Funding Probability']])

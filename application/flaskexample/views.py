@@ -4,6 +4,7 @@ from flaskexample import app
 from .utils import generate_output
 from .utils import generate_maybe
 from .utils import get_probability
+from .utils import get_prob_df
 #import flaskexample.utils
 # from sqlalchemy import create_engine
 # from sqlalchemy_utils import database_exists, create_database
@@ -14,8 +15,6 @@ import pandas as pd
 @app.route('/', methods=["GET", "POST"])
 @app.route('/index', methods=["GET", "POST"])
 def index():
-    res1 = ""
-    res2 = ""
     df = ''
     if request.method == "POST":
         # Get Inputs
@@ -25,19 +24,10 @@ def index():
         state = request.form.get('state', '')
         poverty = request.form.get('poverty', '')
         query = request.form.get('query', '')
-        print(resource, grade, prefix, state, poverty, query)
         # Get the outputs
-        res1, res2 = get_probability(resource, 
-            grade, prefix, state, poverty, query)
-        # Render the output page
-        df = pd.DataFrame({
-          "Price": range(500, 5000, 500),
-          "Confidence": range(10, 100, 10)
-        })
+        df = get_prob_df(resource, grade, prefix, state, poverty, query)
         df = df.to_html(index=True)
     return render_template(
         'master.html',
-        res1 = res1,
-        res2 = res2,
-#        res_df = df
+        res_df = df
     )
