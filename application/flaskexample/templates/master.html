@@ -147,6 +147,12 @@
         <script src="/static/js/plugins.js"></script>
         <script src="/static/js/main.js"></script>
         <script>
+          var params = {{ search_params | safe }};
+          console.log(params);
+          if (params.grade) {
+            load_params(params);
+          }
+
           $("#btn-prefil-a").click(function(e) {
             $("select[name='resource']").val("Trips");
             $("select[name='grade']").val("Grades 3-5");
@@ -165,6 +171,14 @@
             $("input[name='query']").val("3000");
             e.preventDefault();
           });
+          function load_params(params) {
+            $("select[name='resource']").val(params.resource);
+            $("select[name='grade']").val(params.grade);
+            $("select[name='prefix']").val(params.prefix);
+            $("select[name='poverty']").val(params.poverty);
+            $("select[name='state']").val(params.state);
+            $("input[name='query']").val(params.query);
+          };
         </script>
     </body>
 </html>
