@@ -5,6 +5,7 @@ from .utils import generate_output
 from .utils import generate_maybe
 from .utils import get_probability
 from .utils import get_prob_df
+from .utils import is_input_ok
 #import flaskexample.utils
 # from sqlalchemy import create_engine
 # from sqlalchemy_utils import database_exists, create_database
@@ -15,7 +16,7 @@ import pandas as pd
 @app.route('/', methods=["GET", "POST"])
 @app.route('/index', methods=["GET", "POST"])
 def index():
-    df_html = ''
+    out_html = ''
     search_params = {}
     if request.method == "POST":
         # Get Inputs
@@ -34,10 +35,14 @@ def index():
             "resource": resource
         }
         # Get the outputs
-        df = get_prob_df(resource, grade, prefix, state, poverty, query)
-        df_html = df.to_html(index=True)
+        problem_str = is_input_ok(resource, grade, prefix, state, poverty, query)
+        if len(problem_str) == 0:
+            df = get_prob_df(resource, grade, prefix, state, poverty, query)
+            out_html = df.to_html(index=True)
+        else:
+            out_html = problem_str
     return render_template(
         'master.html',
-        res_df = df_html,
+        res_df = out_html,
         search_params = search_params
     )

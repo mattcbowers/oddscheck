@@ -135,3 +135,14 @@ def get_prob_df(resource, grade, prefix, state, poverty, query):
             'Chance of Funding':[prob_to_str(prob)]},
         index = ['Your Input'])
     return(df[['Project Cost', 'Chance of Funding']])
+
+def is_input_ok(resource, grade, prefix, state, poverty, query):
+    out_str = 'Crapy inputs.'
+    query = '100'
+    # if any of the strings are empty tell the user to fill the fields
+    if query:
+        print("Query=")
+        print(query)
+    # if query is not a positive number tell the user
+    out_str = ''
+    return(out_str)
