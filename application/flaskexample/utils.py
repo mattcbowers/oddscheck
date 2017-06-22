@@ -138,10 +138,16 @@ def get_prob_df(resource, grade, prefix, state, poverty, query):
 
 def is_input_ok(resource, grade, prefix, state, poverty, query):
     out_str = ''
+    # if query is not a positive number tell the user
+    try:
+        float(query)
+        if float(query) < 0:
+            out_str = 'Project cost must be a non-negative number.'
+    except:
+        out_str = 'Query is not a number'
     # if any of the strings are empty tell the user to fill the fields
     params = [resource, grade, prefix, state, poverty, query]
     lengths = list(map(len, params))
     if any([ln == 0 for ln in lengths]):
         out_str = 'Missing parameter values'
-    # if query is not a positive number tell the user
     return(out_str)
