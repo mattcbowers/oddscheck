@@ -127,11 +127,11 @@ def get_prob_df(resource, grade, prefix, state, poverty, query):
         # Output Formatting
         df = pd.DataFrame({
             'Project Cost':[price_to_str(price), price_to_str(price_opt)],
-            'Funding Probability':[prob_to_str(prob), prob_to_str(prob_opt)]},
-        index = ['Input', 'Recommended'])
+            'Chance of Funding':[prob_to_str(prob), prob_to_str(prob_opt)]},
+        index = ['Your Input', 'Recommended'])
     else :
         df = pd.DataFrame({
             'Project Cost':[price_to_str(price)],
-            'Funding Probability':[prob_to_str(prob)]},
-        index = ['Input'])
-    return(df[['Project Cost', 'Funding Probability']])
+            'Chance of Funding':[prob_to_str(prob)]},
+        index = ['Your Input'])
+    return(df[['Project Cost', 'Chance of Funding']])

@@ -15,7 +15,7 @@ import pandas as pd
 @app.route('/', methods=["GET", "POST"])
 @app.route('/index', methods=["GET", "POST"])
 def index():
-    df = ''
+    df_html = ''
     search_params = {}
     if request.method == "POST":
         # Get Inputs
@@ -35,14 +35,9 @@ def index():
         }
         # Get the outputs
         df = get_prob_df(resource, grade, prefix, state, poverty, query)
-#        df = df.to_html(index=True, classes = 'dataframe')
-        df = df.to_html(index=True)
-        print(df)
-        #df = df.replace('<table','<font size="20" face="Courier New" ><table')
-        #df = df.replace('</table>','</table></font>')
-        #print(df)
+        df_html = df.to_html(index=True)
     return render_template(
         'master.html',
-        res_df = df,
+        res_df = df_html,
         search_params = search_params
     )
