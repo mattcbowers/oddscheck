@@ -4,7 +4,7 @@ table.dataframe, .dataframe th, .dataframe td {
     text-align:left;
     padding: 10px;
     margin-bottom: 40px;
-    font-size: 0.9em;
+    font-size: 5em;
  }
 
  tr:nth-child(odd)   { background-color:#eee; }

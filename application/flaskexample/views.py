@@ -35,7 +35,9 @@ def index():
         }
         # Get the outputs
         df = get_prob_df(resource, grade, prefix, state, poverty, query)
+#        df = df.to_html(index=True, classes = 'dataframe')
         df = df.to_html(index=True)
+        print(df)
         #df = df.replace('<table','<font size="20" face="Courier New" ><table')
         #df = df.replace('</table>','</table></font>')
         #print(df)
