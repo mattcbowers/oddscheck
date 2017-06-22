@@ -137,12 +137,11 @@ def get_prob_df(resource, grade, prefix, state, poverty, query):
     return(df[['Project Cost', 'Chance of Funding']])
 
 def is_input_ok(resource, grade, prefix, state, poverty, query):
-    out_str = 'Crapy inputs.'
-    query = '100'
-    # if any of the strings are empty tell the user to fill the fields
-    if query:
-        print("Query=")
-        print(query)
-    # if query is not a positive number tell the user
     out_str = ''
+    # if any of the strings are empty tell the user to fill the fields
+    params = [resource, grade, prefix, state, poverty, query]
+    lengths = list(map(len, params))
+    if any([ln == 0 for ln in lengths]):
+        out_str = 'Missing parameter values'
+    # if query is not a positive number tell the user
     return(out_str)
