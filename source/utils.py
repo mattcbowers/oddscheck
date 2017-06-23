@@ -35,7 +35,7 @@ class ProjectsData(object):
         price_cap = 10000
         students_reached_cap = 10000
         self.df = self.df[self.df['students_reached'] < students_reached_cap]
-#        self.df = self.df[self.df['total_price_excluding_optional_support'] < price_cap]
+        self.df = self.df[self.df['total_price_excluding_optional_support'] < price_cap]
         print("Removing outliers")
         print(self.df.shape)
         # remove rows with NA
@@ -62,7 +62,6 @@ class ProjectsData(object):
             df_balance = pd.concat([df_true_sub, df_false])
             return(df_balance)
         self.df_train = downsample_majority(self.df_train)
-        self.df_test = downsample_majority(self.df_test)
 
     def X_Y_split(self, y_col = 'funded'):
         def df_to_X(df):
