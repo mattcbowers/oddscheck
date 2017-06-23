@@ -7,3 +7,4 @@ models
 slides
 *.pyc
 .Rapp.History
+sync.sh
