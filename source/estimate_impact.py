@@ -40,34 +40,17 @@ res = optimize.minimize_scalar(expected_payoff, args = (row, pipe), options = {'
 print(res.x)
 price_opt = res.x
 
-"""
+# Create OddsCheck price column
 df = projects.df
 df['p_hat'] = pipe.predict_proba(df)[:, 1]
 df['price_oc'] = df.total_price_excluding_optional_support
 df.price_oc[df.price_oc > price_opt] = price_opt
-df['payoff'] = df['funded'] * df['total_price_excluding_optional_support']
-df['exp_payoff'] = df['total_price_excluding_optional_support'] * df['p_hat']
-df['exp_payoff_oc'] = df['price_oc'] * df['p_hat']
-"""
-
-#######
-df = projects.df
-df['p_hat'] = pipe.predict_proba(df)[:, 1]
-df['price_oc'] = df.total_price_excluding_optional_support
-df.price_oc[df.price_oc > price_opt] = price_opt
-
 df_oc_price = df.copy()
 df_oc_price['total_price_excluding_optional_support'] = df.price_oc
 df['p_hat_oc'] = pipe.predict_proba(df_oc_price)[:, 1]
-
 df['exp_payoff'] = df['total_price_excluding_optional_support'] * df['p_hat']
 df['payoff'] = df['funded'] * df['total_price_excluding_optional_support']
 df['exp_payoff_oc'] = df['price_oc'] * df['p_hat_oc']
-######
-
-#total_payoff = df.payoff.sum()
-#total_exp_payoff = df.exp_payoff.sum()
-#total_exp_payoff_oc = df.exp_payoff_oc.sum()
 
 # Look at the projects that get an OddsCheck recommended price
 total_payoff = df.payoff[df['total_price_excluding_optional_support'] > price_opt].sum()
@@ -85,5 +68,3 @@ print('Percent gain over expected payoff')
 print(total_exp_payoff_oc/total_exp_payoff)
 print('Total $ gained over expected')
 print(total_exp_payoff_oc - total_exp_payoff)
-
-# 
